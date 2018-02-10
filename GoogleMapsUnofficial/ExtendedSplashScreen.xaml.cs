@@ -1,12 +1,17 @@
 ﻿using GoogleMapsUnofficial.ViewModel;
 using System;
+using System.Numerics;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Devices.Geolocation;
+using Windows.Foundation.Metadata;
 using Windows.Storage;
+using Windows.UI.Composition;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Hosting;
+using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,11 +30,43 @@ namespace GoogleMapsUnofficial
             this.Loaded += ExtendedSplashScreen_Loaded;
             para = parameter;
             DispatcherTime = new DispatcherTimer();
-            DispatcherTime.Interval = new TimeSpan(0, 0, 10);
+            DispatcherTime.Interval = new TimeSpan(0, 0, 40);
             DispatcherTime.Tick += DispatcherTime_Tick;
             DispatcherTime.Start();
         }
 
+        private void applyAcrylicAccent(Grid Grid1)
+        {
+            if (ClassInfo.DeviceType() == ClassInfo.DeviceTypeEnum.Phone) return;
+            if (ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.AcrylicBrush"))
+            {
+                var ac = new AcrylicBrush();
+                var brush = Resources["SystemControlAccentAcrylicWindowAccentMediumHighBrush"] as AcrylicBrush;
+                ac = brush;
+                ac.TintOpacity = 0.7;
+                ac.BackgroundSource = AcrylicBackgroundSource.HostBackdrop;
+                Grid1.Background = ac;
+                return;
+            }
+            if (ApiInformation.IsMethodPresent("Windows.UI.Xaml.Hosting.ElementCompositionPreview", "SetElementChildVisual"))
+            {
+                _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+                _hostSprite = _compositor.CreateSpriteVisual();
+                _hostSprite.Size = new Vector2((float)Grid1.ActualWidth, (float)Grid1.ActualHeight);
+
+                ElementCompositionPreview.SetElementChildVisual(Grid1, _hostSprite);
+                var b = _compositor.CreateHostBackdropBrush();
+                _hostSprite.Brush = _compositor.CreateHostBackdropBrush();
+            }
+        }
+
+        Compositor _compositor;
+        SpriteVisual _hostSprite;
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (_hostSprite != null)
+                _hostSprite.Size = e.NewSize.ToVector2();
+        }
         private void DispatcherTime_Tick(object sender, object e)
         {
             if (Geolocator.DefaultGeoposition.HasValue && Geolocator.IsDefaultGeopositionRecommended)
@@ -41,6 +78,7 @@ namespace GoogleMapsUnofficial
 
         private async void ExtendedSplashScreen_Loaded(object sender, RoutedEventArgs e)
         {
+            applyAcrylicAccent(Grid1);
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async delegate
             {
                 try
@@ -77,7 +115,7 @@ namespace GoogleMapsUnofficial
             DispatcherTime.Stop();
             DispatcherTime.Tick -= DispatcherTime_Tick;
             DispatcherTime = null;
-            await Task.Delay(500);
+            await Task.Delay(1000);
             Window.Current.Content = new MainPage(para);
             Window.Current.Activate();
         }
