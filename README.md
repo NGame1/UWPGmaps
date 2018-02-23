@@ -1,6 +1,6 @@
 # Project moved 
 
-[New Project is here](https://github.com/MahStudio/WinGo-Maps)
+[**New Project is here**](https://github.com/MahStudio/WinGo-Maps)
 
 Unofficial Google Map client for Universal Windows Platform 
 
