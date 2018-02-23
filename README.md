@@ -1,4 +1,7 @@
-# UWPGmaps 
+# Project moved 
+
+[New Project is here](https://github.com/MahStudio/WinGo-Maps)
+
 Unofficial Google Map client for Universal Windows Platform 
 
 [Telegram Messenger Insiders Group](https://t.me/joinchat/DQwGRhG-DXgBJNDWjGEoZQ)
