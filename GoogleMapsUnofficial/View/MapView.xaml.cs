@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using GoogleMapsUnofficial.View.DirectionsControls;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -52,11 +53,20 @@ namespace GoogleMapsUnofficial.View
         string LastPlaceID { get; set; }
         public static MapControl MapControl;
         public static MapView StaticMapView { get; set; }
+
+        public static NewDirections dc { get; set; }
+        DispatcherTimer DispatcherTime;
         public MapView()
         {
             this.InitializeComponent();
             MapControl = Map;
             StaticMapView = this;
+            DispatcherTime = new DispatcherTimer
+            {
+                Interval = new TimeSpan(0, 0, 10)
+            };
+            DispatcherTime.Tick += DispatcherTime_Tick;
+            DispatcherTime.Start();
             Map.Style = MapStyle.None;
             Map.TileSources.Clear();
             var AllowOverstretch = SettingsSetters.GetAllowOverstretch();
@@ -99,6 +109,7 @@ namespace GoogleMapsUnofficial.View
             //    MyLocationControl.Margin = new Thickness(28, 28, 28, 28);
             //}
         }
+                
         Geopoint GeopointFromPoint(Point point)
         {
             Geopoint geoPoint = null;
@@ -516,6 +527,60 @@ namespace GoogleMapsUnofficial.View
             var redir = "https://www.google.com/maps/@" + LastRightTap.Position.Latitude + "," + LastRightTap.Position.Latitude + "," + Map.ZoomLevel.ToString("0.00") + "z/data=!10m1!1e2";
             await Launcher.LaunchUriAsync(new Uri(redir));
 
+        }
+
+        private void TapHideRegion_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            DispatcherTime = new DispatcherTimer
+            {
+                Interval = new TimeSpan(0, 0, 10)
+            };
+            var dc = DirectionsControl;
+            if (dc.Visibility == Visibility.Collapsed)
+            {
+                try
+                {
+                    DispatcherTime.Tick += DispatcherTime_Tick;
+                    DispatcherTime.Start();
+                    dc.Visibility = Visibility.Visible;
+                }
+                catch { }
+            }
+        }
+
+        private async void DispatcherTime_Tick(object sender, object e)
+        {
+            var dc = DirectionsControl;
+            if( dc.Visibility==Visibility.Visible)
+            {
+                try
+                {
+                    DispatcherTime.Stop();
+                    DispatcherTime.Tick -= DispatcherTime_Tick;
+                    DispatcherTime = null;
+                    await Task.Delay(500);
+                    dc.Visibility = Visibility.Collapsed;
+                }
+                catch { }
+            }                       
+        }
+
+        private void TapHideRegion_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            DispatcherTime = new DispatcherTimer
+            {
+                Interval = new TimeSpan(0, 0, 10)
+            };
+            var dc = DirectionsControl;
+
+            try
+            {
+                dc.Visibility = Visibility.Visible;
+                DispatcherTime.Tick += DispatcherTime_Tick;
+                DispatcherTime.Start();
+
+            }
+            catch { }
         }
     }
 }

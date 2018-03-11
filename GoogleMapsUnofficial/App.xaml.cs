@@ -26,6 +26,7 @@ namespace GoogleMapsUnofficial
         public App()
         {
             this.InitializeComponent();
+            StartFluent();
             this.Suspending += OnSuspending;
             this.UnhandledException += App_UnhandledException;
         }
@@ -83,6 +84,17 @@ namespace GoogleMapsUnofficial
 
                 }
             }
+            //Set StatusBar background and foreground colors
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                var statusBar = StatusBar.GetForCurrentView();
+                if (statusBar != null)
+                {
+                    statusBar.BackgroundOpacity = 1;
+                    statusBar.BackgroundColor = Colors.DodgerBlue;
+                    statusBar.ForegroundColor = Colors.White;
+                }
+            }
             try
             {
                 StatusBar.GetForCurrentView().ForegroundColor = Colors.Black;
@@ -133,6 +145,7 @@ namespace GoogleMapsUnofficial
             try
             {
                 StatusBar.GetForCurrentView().ForegroundColor = Colors.Black;
+
             }
             catch { }
             StartFluent();

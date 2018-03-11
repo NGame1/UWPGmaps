@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace GoogleMapsUnofficial
@@ -27,6 +28,8 @@ namespace GoogleMapsUnofficial
         object para = null;
         public static Frame RootFrame { get; set; }
         public static Grid Grid { get; set; }
+
+        public static SplitView Splt { get; set; }
         public MainPage(object parameter = null)
         {
             this.InitializeComponent();
@@ -34,30 +37,35 @@ namespace GoogleMapsUnofficial
             this.Loaded += MainPage_Loaded;
             RootFrame = Fr;
             Grid = Gr;
+            Splt = Split;
             para = parameter;
         }
         private void applyAcrylicAccent(Panel panel)
         {
             if (ClassInfo.DeviceType() == ClassInfo.DeviceTypeEnum.Phone) return;
+
+
             if (ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.AcrylicBrush"))
             {
                 var ac = new AcrylicBrush();
-                var brush = Resources["SystemControlChromeMediumLowAcrylicElementMediumBrush"] as AcrylicBrush;
+                var brush = Resources["SystemControlChromeMediumLowAcrylicWindowMediumBrush"] as AcrylicBrush;
                 ac = brush;
-                ac.TintOpacity = 0.7;
-                ac.BackgroundSource = AcrylicBackgroundSource.HostBackdrop;
-                Split.PaneBackground = ac;
+                //ac.TintOpacity = 0.7;
+                //ac.BackgroundSource = AcrylicBackgroundSource.HostBackdrop;
+                //Split.PaneBackground = Resources["Transparent"] as SolidColorBrush;
+                panel.Background = ac;
                 return;
             }
-            if (ApiInformation.IsMethodPresent("Windows.UI.Xaml.Hosting.ElementCompositionPreview", "SetElementChildVisual"))
+           else if (ApiInformation.IsMethodPresent("Windows.UI.Xaml.Hosting.ElementCompositionPreview", "SetElementChildVisual"))
             {
+                
                 _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
                 _hostSprite = _compositor.CreateSpriteVisual();
                 _hostSprite.Size = new Vector2((float)panel.ActualWidth, (float)panel.ActualHeight);
 
                 ElementCompositionPreview.SetElementChildVisual(panel, _hostSprite);
-                var b = _compositor.CreateHostBackdropBrush();
                 _hostSprite.Brush = _compositor.CreateHostBackdropBrush();
+
             }
         }
 
@@ -114,6 +122,30 @@ namespace GoogleMapsUnofficial
         private void HmenuBTN_Click(object sender, RoutedEventArgs e)
         {
             Split.IsPaneOpen = !Split.IsPaneOpen;
+            //if (Split.DisplayMode== SplitViewDisplayMode.Inline)
+            //{
+            //    if(Split.IsPaneOpen == true)
+            //    {
+            //        Split.DisplayMode = SplitViewDisplayMode.CompactInline;
+            //        Split.IsPaneOpen = !Split.IsPaneOpen;
+            //    }
+
+            //}
+            //else if (Split.DisplayMode == SplitViewDisplayMode.CompactInline)
+            //{
+
+            //    if (Split.IsPaneOpen == true)
+            //    {
+            //        Split.DisplayMode = SplitViewDisplayMode.Inline;
+            //        !Split.IsPaneOpen = Split.IsPaneOpen;
+            //    }
+
+            //}
+            //else if (Split.DisplayMode == SplitViewDisplayMode.Overlay)
+            //{
+            //    Split.IsPaneOpen = !Split.IsPaneOpen;
+            //}
+
         }
 
         private async void MenuItem_Click(object sender, ItemClickEventArgs e)
