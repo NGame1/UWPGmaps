@@ -260,3 +260,13 @@ paket-files/
 __pycache__/
 *.pyc
 /GoogleMapsUnofficial/AppCore.cs
+/GoogleMapsUnofficial/_scale-100.appx
+/GoogleMapsUnofficial/_scale-125.appx
+/GoogleMapsUnofficial/_scale-150.appx
+/GoogleMapsUnofficial/_scale-400.appx
+/GoogleMapsUnofficial/_scale-400.appx
+/GoogleMapsUnofficial/_scale-400.appx
+*.appx
+*.appx
+*.appx
+*.appx
