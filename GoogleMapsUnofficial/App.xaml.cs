@@ -145,7 +145,6 @@ namespace GoogleMapsUnofficial
             try
             {
                 StatusBar.GetForCurrentView().ForegroundColor = Colors.Black;
-
             }
             catch { }
             StartFluent();

@@ -109,7 +109,6 @@ namespace GoogleMapsUnofficial.View
             //    MyLocationControl.Margin = new Thickness(28, 28, 28, 28);
             //}
         }
-                
         Geopoint GeopointFromPoint(Point point)
         {
             Geopoint geoPoint = null;
