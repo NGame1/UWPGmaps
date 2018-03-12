@@ -172,6 +172,9 @@
     <Compile Include="View\OnMapControls\MyLocationUserControl.xaml.cs">
       <DependentUpon>MyLocationUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\OnMapControls\NewZoomControl.xaml.cs">
+      <DependentUpon>NewZoomControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\OnMapControls\SavedPlacesUserControl.xaml.cs">
       <DependentUpon>SavedPlacesUserControl.xaml</DependentUpon>
     </Compile>
@@ -358,6 +361,10 @@
     <Page Include="View\OnMapControls\MyLocationUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OnMapControls\NewZoomControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\OnMapControls\SavedPlacesUserControl.xaml">
       <SubType>Designer</SubType>
